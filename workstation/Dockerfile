@@ -21,24 +21,11 @@ FROM ubuntu:18.10 as terraform_builder
 RUN apt-get update && apt-get install -y wget ca-certificates unzip
 RUN wget https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && unzip terraform_0.11.11_linux_amd64.zip && chmod +x terraform && mv terraform /usr/local/bin && rm terraform_0.11.11_linux_amd64.zip
 
-# install protobuf
-FROM ubuntu:18.10 as protobuf_builder
-RUN apt-get update && apt-get install -y wget ca-certificates unzip
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip && unzip protoc-3.6.1-linux-x86_64.zip && mv bin/protoc /usr/local/bin && mv include/* /usr/local/include/ && rm protoc-3.6.1-linux-x86_64.zip
-
 # install vim plugins
 FROM ubuntu:18.10 as vim_plugins_builder
 RUN apt-get update && apt-get install -y git ca-certificates
 RUN mkdir -p /root/.vim/plugged && cd /root/.vim/plugged && \ 
 	git clone 'https://github.com/AndrewRadev/splitjoin.vim' && \ 
-	git clone 'https://github.com/ConradIrwin/vim-bracketed-paste' && \
-	git clone 'https://github.com/Raimondi/delimitMate' && \
-	git clone 'https://github.com/SirVer/ultisnips' && \
-	git clone 'https://github.com/cespare/vim-toml' && \
-	git clone 'https://github.com/corylanou/vim-present' && \
-	git clone 'https://github.com/ekalinin/Dockerfile.vim' && \
-	git clone 'https://github.com/elzr/vim-json' && \
-	git clone 'https://github.com/fatih/vim-go' && \
 	git clone 'https://github.com/fatih/vim-hclfmt' && \
 	git clone 'https://github.com/fatih/vim-nginx' && \
 	git clone 'https://github.com/godlygeek/tabular' && \
@@ -58,30 +45,6 @@ RUN mkdir -p /root/.vim/plugged && cd /root/.vim/plugged && \
 	git clone 'https://github.com/tpope/vim-repeat' && \
 	git clone 'https://github.com/tpope/vim-scriptease' && \
 	git clone 'https://github.com/ervandew/supertab'
-
-# install go tools
-FROM golang:$GOLANG_VERSION as golang_builder
-RUN go get -u github.com/davidrjenni/reftools/cmd/fillstruct
-RUN go get -u github.com/mdempsky/gocode
-RUN go get -u github.com/rogpeppe/godef
-RUN go get -u github.com/zmb3/gogetdoc
-RUN go get -u golang.org/x/tools/cmd/goimports
-RUN go get -u github.com/golang/lint/golint
-RUN go get -u github.com/alecthomas/gometalinter
-RUN go get -u github.com/fatih/gomodifytags
-RUN go get -u golang.org/x/tools/cmd/gorename
-RUN go get -u golang.org/x/tools/cmd/guru
-RUN go get -u github.com/josharian/impl
-RUN go get -u honnef.co/go/tools/cmd/keyify
-RUN go get -u github.com/fatih/motion
-RUN go get -u github.com/koron/iferr
-RUN go get -v -d github.com/stamblerre/gocode && go build -o gocode-gomod github.com/stamblerre/gocode && mv gocode-gomod /go/bin
-
-# generic tools
-RUN go get -u github.com/aybabtme/humanlog/cmd/...
-RUN go get -u github.com/fatih/hclfmt
-RUN GIT_TAG="v1.2.0" && go get -d -u github.com/golang/protobuf/protoc-gen-go && git -C "$(go env GOPATH)"/src/github.com/golang/protobuf checkout $GIT_TAG && go install github.com/golang/protobuf/protoc-gen-go
-
 
 # base OS
 FROM ubuntu:18.10
@@ -182,7 +145,6 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 	dpkg-reconfigure --frontend=noninteractive locales && \
 	update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE
 
-# gcloud
 RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
   echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
@@ -199,18 +161,11 @@ COPY --from=kubectl_builder /usr/local/bin/kubectl /usr/local/bin/
 # kubectl
 COPY --from=onepassword_builder /usr/bin/op /usr/local/bin/
 
-# golang tools
-COPY --from=golang_builder /go/bin/* /usr/local/bin/
-
 # doctl tools
 COPY --from=doctl_builder /usr/local/bin/doctl /usr/local/bin/
 
 # terraform tools
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
-
-# protobuf tools
-COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
-COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
 
 # install tools
 RUN wget https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && sudo dpkg -i jump_0.22.0_amd64.deb && rm -rf jump_0.22.0_amd64.deb

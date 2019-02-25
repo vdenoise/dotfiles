@@ -1,10 +1,7 @@
-ARG GOLANG_VERSION=1.11.4
-
-# install kubectl
-FROM ubuntu:18.10 as kubectl_builder
-RUN apt-get update && apt-get install -y curl ca-certificates
-RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-RUN chmod 755 /usr/local/bin/kubectl
+LABEL maintainer="Quant Development Machine - Vincent Denoiseux vincent@denoiseux.com"
+ARG NB_USER="vincent"
+ARG NB_UID="1000"
+ARG NB_GID="100"
 
 # install 1password
 FROM ubuntu:18.10 as onepassword_builder
@@ -126,6 +123,102 @@ RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
 	zsh \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
+
+# pre-requisites for R / Scipy
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    fonts-dejavu \
+    tzdata \
+    unixodbc \
+    unixodbc-dev \
+    r-cran-rodbc \
+    gfortran \
+    gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV CONDA_DIR=/opt/conda \
+    SHELL=/bin/bash \
+    NB_USER=$NB_USER \
+    NB_UID=$NB_UID \
+    NB_GID=$NB_GID \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
+ENV PATH=$CONDA_DIR/bin:$PATH \
+    HOME=/home/$NB_USER
+
+ADD fix-permissions /usr/local/bin/fix-permissions
+
+#Install conda as vincent and check the md5 sum provided on the download site
+ENV MINICONDA_VERSION 4.5.11
+RUN cd /tmp && \
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
+    echo "e1045ee415162f944b6aebfe560b8fee *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
+    rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
+    $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
+    $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
+    $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
+    $CONDA_DIR/bin/conda install --quiet --yes conda="${MINICONDA_VERSION%.*}.*" && \
+    $CONDA_DIR/bin/conda update --all --quiet --yes && \
+    conda clean -tipsy && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# R packages
+RUN conda install --quiet --yes \
+    'r-base=3.5.1' \
+    'r-rodbc=1.3*' \
+    'unixodbc=2.3.*' \
+    'r-irkernel=0.8*' \
+    'r-plyr=1.8*' \
+    'r-devtools=1.13*' \
+    'r-tidyverse=1.2*' \
+    'r-shiny=1.2*' \
+    'r-rmarkdown=1.11*' \
+    'r-forecast=8.2*' \
+    'r-rsqlite=2.1*' \
+    'r-reshape2=1.4*' \
+    'r-nycflights13=1.0*' \
+    'r-caret=6.0*' \
+    'r-rcurl=1.95*' \
+    'r-crayon=1.3*' \
+    'r-randomforest=4.6*' \
+    'r-htmltools=0.3*' \
+    'r-sparklyr=0.9*' \
+    'r-htmlwidgets=1.2*' \
+    'r-hexbin=1.27*' && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR
+
+# Install Tini
+RUN conda install --quiet --yes 'tini=0.18.0' && \
+    conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# Install Jupyter Notebook, Lab, and Hub
+# Generate a notebook server config
+# Cleanup temporary files
+# Correct permissions
+# Do all this in a single RUN command to avoid duplicating all of the
+# files across image layers when the permissions change
+RUN conda install --quiet --yes \
+    'notebook=5.7.2' \
+    'jupyterhub=0.9.4' \
+    'jupyterlab=0.35.4' && \
+    conda clean -tipsy && \
+    jupyter labextension install @jupyterlab/hub-extension@^0.12.0 && \
+    npm cache clean --force && \
+    jupyter notebook --generate-config && \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+USER vincent
 
 
 RUN mkdir /run/sshd

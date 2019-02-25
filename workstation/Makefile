@@ -14,7 +14,7 @@ push:
 	@echo "==> Your image is now available at vdenoise/${NAME}:$(GITCOMMIT)"
 
 run: kill
-	docker run -it -h dev -d --net=host --rm -v /var/run/docker.sock:/var/run/docker.sock -v /home/fatih/code:/home/fatih/code -v /home/fatih/.ssh:/home/fatih/.ssh -v /home/fatih/.zsh_private:/home/fatih/.zsh_private -v /home/fatih/.zsh_history:/home/fatih/.zsh_history --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --privileged --name dev vdenoise:dev-vince 
+	docker run -it -h dev -d --net=host --rm -v /var/run/docker.sock:/var/run/docker.sock -v /home/vincent:/home/vincent -v /home/vincent/.ssh:/home/vincent/.ssh -v /home/vincent/.zsh_private:/home/vincent/.zsh_private -v /home/vincent/.zsh_history:/home/vincent/.zsh_history --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --privileged --name dev vdenoise/dev 
 
 ssh:
 	mosh --no-init --ssh="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 3222" fatih@localhost -- tmux new-session -AD -s main

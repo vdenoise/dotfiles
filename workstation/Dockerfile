@@ -196,6 +196,7 @@ USER $NB_UID
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
+USER root
 #Install conda as vincent and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION 4.5.11
 RUN cd /tmp && \
@@ -239,6 +240,7 @@ RUN conda install --quiet --yes \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR
 
+USER root
 # Install Tini
 RUN conda install --quiet --yes 'tini=0.18.0' && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
@@ -317,6 +319,7 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+USER root
 # Install facets which does not have a pip or conda package at the moment
 RUN cd /tmp && \
     git clone https://github.com/PAIR-code/facets.git && \
@@ -344,7 +347,7 @@ RUN apt-get update && \
     gcc && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
+USER root
 
 # R packages
 RUN conda install --quiet --yes \
@@ -372,6 +375,7 @@ RUN conda install --quiet --yes \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR
 
+USER root 
 RUN mkdir /run/sshd
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 RUN sed 's/#Port 22/Port 3222/' -i /etc/ssh/sshd_config
@@ -414,7 +418,7 @@ COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 # install tools
 RUN wget https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && sudo dpkg -i jump_0.22.0_amd64.deb && rm -rf jump_0.22.0_amd64.deb
 
-RUN mkdir ~/.ssh && curl -fsL https://github.com/fatih.keys > ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+RUN mkdir ~/.ssh && curl -fsL https://github.com/vdenoise.keys > ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
 
 # vim plugins
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

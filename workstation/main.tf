@@ -7,11 +7,6 @@ provider "digitalocean" {
   token="${var.digitalocean_token}"
 }
 
-resource "digitalocean_ssh_key" "default" {
-  name       = "Terraform Example"
-  public_key = "${file("/home/vincent/.ssh/ipad_rsa.pub")}"
-}
-
 resource "digitalocean_droplet" "dev" {
   ssh_keys           = [24095233]         # doctl compute ssh-key list
   image              = "ubuntu-18-10-x64"
@@ -21,7 +16,6 @@ resource "digitalocean_droplet" "dev" {
   backups            = true
   ipv6               = true
   name               = "dev"
-  ssh_keys 					 = ["${var.digitalocean_ssh_fingerprint}"]
 
   # I really hate user-data, don't @ me. This is powerful and works fine for my
   # needs

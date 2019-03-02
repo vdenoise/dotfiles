@@ -11,6 +11,7 @@ if [ ! -d ~/dotfiles ]; then
 fi
 
 cd ~/dotfiles 
+echo "git remote"
 git remote set-url origin git@github.com:vdenoise/dotfiles.git
 
 ln -s $(pwd)/vimrc ~/.vimrc

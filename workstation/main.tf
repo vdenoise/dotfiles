@@ -1,10 +1,10 @@
-variable "digitalocean_token" {}
-variable "digitalocean_ssh_fingerprint" {}
-variable "digitalocean_pub_key" {}
-variable "digitalocean_private_key" {}
+variable "do_token" {}
+variable "pub_key" {}
+variable "pvt_key" {}
+variable "ssh_fingerprint" {}
 
 provider "digitalocean" {
-  token="${var.digitalocean_token}"
+	token = "${var.do_token}"
 }
 
 resource "digitalocean_droplet" "dev" {
@@ -16,6 +16,16 @@ resource "digitalocean_droplet" "dev" {
   backups            = true
   ipv6               = true
   name               = "dev"
+	ssh_keys = [
+      "${var.ssh_fingerprint}"
+    ]
+
+	connection {
+      user = "root"
+      type = "ssh"
+      private_key = "${file(var.pvt_key)}" 
+      timeout = "2m"
+  }
 
   # I really hate user-data, don't @ me. This is powerful and works fine for my
   # needs
@@ -54,12 +64,6 @@ resource "digitalocean_droplet" "dev" {
       timeout     = "2m"
     }
   }
-}
-
-#I create a floating ip:
-resource "digitalocean_floating_ip" "dev" {
-  droplet_id = "${digitalocean_droplet.dev.id}"
-  region = "${digitalocean_droplet.dev.region}"
 }
 
 resource "digitalocean_firewall" "dev" {

@@ -7,8 +7,7 @@ export OP_SESSION_my=$(op signin https://my.1password.com vincent@denoiseux.com 
 
 echo "Pulling secrets"
 # private keys
-op get document 'id_rsa' > github_rsa
-op get document 'ipad_rsa' > ipad_rsa 
+op get document 'id_rsa' > id_rsa
 op get document 'zsh_private' > zsh_private
 op get document 'zsh_history' > zsh_history
 

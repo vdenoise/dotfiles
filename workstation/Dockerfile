@@ -424,7 +424,7 @@ RUN mkdir ~/.ssh && curl -fsL https://github.com/vdenoise.keys > ~/.ssh/authoriz
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 COPY --from=vim_plugins_builder /root/.vim/plugged /root/.vim/plugged
 
-RUN git clone https://github.com/junegunn/fzf /root/.fzf && cd /root/.fzf && git remote set-url origin git@github.com:junegunn/fzf.git && /root/.fzf/install --bin --64 --no-bash --no-zsh --no-fish
+#RUN git clone https://github.com/junegunn/fzf /root/.fzf && cd /root/.fzf && git remote set-url origin git@github.com:junegunn/fzf.git && /root/.fzf/install --bin --64 --no-bash --no-zsh --no-fish
 
 # zsh plugins
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting

@@ -1,14 +1,22 @@
-variable "do_token" {}
-variable "pub_key" {}
-variable "pvt_key" {}
-variable "ssh_fingerprint" {}
+variable "do_token"{
+  default = "ccc001bafa9f6ddf32c8b6ebaab769e39a5a9899bdd71e5d2482020dd7bbd2b5"
+}
+variable "pub_key"{
+  default = "~/.ssh/id_rsa.pub"
+}
+variable "pvt_key"{
+  default = "~/.ssh/id_rsa"
+}
+variable "ssh_do_fingerprint" {
+  default = "ef:c2:72:18:48:73:44:4c:5f:6e:a7:57:ec:0a:5b:d6"
+}
 
 provider "digitalocean" {
 	token = "${var.do_token}"
 }
 
 resource "digitalocean_droplet" "dev" {
-  ssh_keys           = [24095233]         # doctl compute ssh-key list
+  ssh_keys           = [24130634]         # doctl compute ssh-key list
   image              = "ubuntu-18-10-x64"
   region             = "lon1"
   size               = "s-4vcpu-8gb"
@@ -16,14 +24,11 @@ resource "digitalocean_droplet" "dev" {
   backups            = true
   ipv6               = true
   name               = "dev"
-	ssh_keys = [
-      "${var.ssh_fingerprint}"
-    ]
 
 	connection {
       user = "root"
       type = "ssh"
-      private_key = "${file(var.pvt_key)}" 
+      private_key = "${file(var.pvt_key)}"
       timeout = "2m"
   }
 
@@ -31,10 +36,9 @@ resource "digitalocean_droplet" "dev" {
   # needs
   provisioner "remote-exec" {
     script = "bootstrap.sh"
-
     connection {
       type        = "ssh"
-      private_key = "${file("~/.ssh/ipad_rsa")}"
+      private_key = "${file(var.pvt_key)}"
       user        = "root"
       timeout     = "2m"
     }
@@ -46,7 +50,7 @@ resource "digitalocean_droplet" "dev" {
 
     connection {
       type        = "ssh"
-      private_key = "${file("~/.ssh/ipad_rsa")}"
+      private_key = "${file(var.pvt_key)}"
       user        = "root"
       timeout     = "2m"
     }
@@ -59,7 +63,7 @@ resource "digitalocean_droplet" "dev" {
 
     connection {
       type        = "ssh"
-      private_key = "${file("~/.ssh/ipad_rsa")}"
+      private_key = "${file(var.pvt_key)}"
       user        = "root"
       timeout     = "2m"
     }

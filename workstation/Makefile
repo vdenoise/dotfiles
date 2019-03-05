@@ -17,7 +17,7 @@ run: kill
 	docker run -it -h dev -d --net=host --rm -v /var/run/docker.sock:/var/run/docker.sock -v /home/vincent:/home/vincent -v /home/vincent/.ssh:/home/vincent/.ssh -v /home/vincent/.zsh_private:/home/vincent/.zsh_private -v /home/vincent/.zsh_history:/home/vincent/.zsh_history --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --privileged --name dev vdenoise/dev 
 
 ssh:
-	mosh --no-init --ssh="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 3222" fatih@localhost -- tmux new-session -AD -s main
+	mosh --no-init --ssh="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 3222" vincent@localhost -- tmux new-session -AD -s main
 
 kill:
 	docker kill dev | true

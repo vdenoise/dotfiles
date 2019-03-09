@@ -6,6 +6,9 @@ all: build
 build:
 	docker build -t vdenoise/${NAME}:${GITCOMMIT} .
 
+rebuild:
+	docker build -t vdenoise/${NAME}:${GITCOMMIT} .
+
 push:
 	@echo "==> Publishing vdenoise/${NAME}:$(GITCOMMIT)"
 	@docker tag vdenoise/${NAME}:$(GITCOMMIT) vdenoise/${NAME}:latest

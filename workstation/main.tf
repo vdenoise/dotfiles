@@ -10,6 +10,9 @@ variable "pvt_key"{
 variable "ssh_do_fingerprint" {
   default = "ef:c2:72:18:48:73:44:4c:5f:6e:a7:57:ec:0a:5b:d6"
 }
+variable "size" {
+  default ="s-4vcpu-8gb" 
+}
 
 provider "digitalocean" {
 	token = "${var.do_token}"
@@ -17,7 +20,7 @@ provider "digitalocean" {
 
 resource "digitalocean_droplet" "dev" {
   ssh_keys           = [24130634]         # doctl compute ssh-key list
-  image              = "ubuntu-18-10-x64"
+  image              = "ubuntu-18-04-x64"
   region             = "lon1"
   size               = "s-4vcpu-8gb"
   private_networking = true

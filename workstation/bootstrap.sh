@@ -24,8 +24,8 @@ After=docker.service
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill dev
 ExecStartPre=-/usr/bin/docker rm dev
-ExecStartPre=/usr/bin/docker pull vdenoise/dev
-ExecStart=/usr/bin/docker run -h dev -e TZ=Europe/London --net=host --rm -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/code:/root/code -v /mnt/secrets:/root/secrets --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --privileged --name dev vdenoise/dev
+ExecStartPre=/usr/bin/docker pull vdenoise/dev:7377c98
+ExecStart=/usr/bin/docker run -h dev -e TZ=Europe/London --net=host --rm -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/code:/root/code -v /mnt/secrets:/root/secrets --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --privileged --name dev vdenoise/dev:7377c98
 
 [Install]
 WantedBy=multi-user.target

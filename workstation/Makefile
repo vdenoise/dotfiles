@@ -7,7 +7,7 @@ build:
 	docker build -t vdenoise/${NAME}:${GITCOMMIT} .
 
 rebuild:
-	docker build -t vdenoise/${NAME}:${GITCOMMIT} .
+	docker build --no-cache -t vdenoise/${NAME}:${GITCOMMIT} .
 
 push:
 	@echo "==> Publishing vdenoise/${NAME}:$(GITCOMMIT)"

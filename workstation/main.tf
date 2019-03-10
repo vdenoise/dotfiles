@@ -47,7 +47,7 @@ resource "digitalocean_droplet" "dev" {
     }
   }
 
-  provisioner "file" {
+ provisioner "file" {
     source      = "pull-secrets.sh"
     destination = "/mnt/secrets/pull-secrets.sh"
 
@@ -71,7 +71,9 @@ resource "digitalocean_droplet" "dev" {
       timeout     = "2m"
     }
   }
-}
+  
+ 
+ }
 
 resource "digitalocean_firewall" "dev" {
   name = "dev"

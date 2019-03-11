@@ -1,7 +1,7 @@
 GITCOMMIT := $(shell git rev-parse --short=7 HEAD 2>/dev/null)
 NAME=dev
 
-all: build
+all: build push 
 
 build:
 	docker build -t vdenoise/${NAME}:${GITCOMMIT} .

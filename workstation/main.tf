@@ -1,14 +1,10 @@
 variable "do_token"{
-  default = "ccc001bafa9f6ddf32c8b6ebaab769e39a5a9899bdd71e5d2482020dd7bbd2b5"
 }
 variable "pub_key"{
   default = "~/.ssh/id_rsa.pub"
 }
 variable "pvt_key"{
   default = "~/.ssh/id_rsa"
-}
-variable "ssh_do_fingerprint" {
-  default = "ef:c2:72:18:48:73:44:4c:5f:6e:a7:57:ec:0a:5b:d6"
 }
 variable "size" {
   default ="s-4vcpu-8gb" 

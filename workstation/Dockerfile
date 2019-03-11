@@ -1,63 +1,39 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-# Ubuntu 18.04 (bionic) from 2018-05-26
+# Ubuntu 18.10 (bionic) from 2018-05-26
 # https://github.com/docker-library/official-images/commit/aac6a45b9eb2bffb8102353c350d341a410fb169
 ARG BASE_CONTAINER=ubuntu:18.10
 FROM $BASE_CONTAINER
 
-ARG NB_USER="vincent"
-ARG NB_UID="1000"
+USER root
+ARG NB_USER="root"
+#ARG NB_UID="1000"
 ARG NB_GID="100"
 
 # install kubectl
-FROM ubuntu:18.10 as kubectl_builder
+# FROM $BASE_CONTAINER as kubectl_builder
 RUN apt-get update && apt-get install -y curl ca-certificates
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 RUN chmod 755 /usr/local/bin/kubectl
 
 # install 1password
-FROM ubuntu:18.10 as onepassword_builder
+# FROM $BASE_CONTAINER as onepassword_builder
 RUN apt-get update && apt-get install -y curl ca-certificates unzip
 RUN curl -sS -o 1password.zip https://cache.agilebits.com/dist/1P/op/pkg/v0.5.5/op_linux_amd64_v0.5.5.zip && unzip 1password.zip op -d /usr/bin &&  rm 1password.zip
 
 # install doctl
-FROM ubuntu:18.10 as doctl_builder
+#FROM $BASE_CONTAINER as doctl_builder
 RUN apt-get update && apt-get install -y wget ca-certificates
 RUN wget https://github.com/digitalocean/doctl/releases/download/v1.12.2/doctl-1.12.2-linux-amd64.tar.gz && tar xf doctl-1.12.2-linux-amd64.tar.gz && chmod +x doctl && mv doctl /usr/local/bin && rm doctl-1.12.2-linux-amd64.tar.gz
 
 # install terraform
-FROM ubuntu:18.10 as terraform_builder
+# FROM $BASE_CONTAINER as terraform_builder
 RUN apt-get update && apt-get install -y wget ca-certificates unzip
 RUN wget https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && unzip terraform_0.11.11_linux_amd64.zip && chmod +x terraform && mv terraform /usr/local/bin && rm terraform_0.11.11_linux_amd64.zip
 
-# install vim plugins
-FROM ubuntu:18.10 as vim_plugins_builder
-RUN apt-get update && apt-get install -y git ca-certificates
-RUN mkdir -p /root/.vim/plugged && cd /root/.vim/plugged && \ 
-	git clone 'https://github.com/AndrewRadev/splitjoin.vim' && \ 
-	git clone 'https://github.com/fatih/vim-hclfmt' && \
-	git clone 'https://github.com/fatih/vim-nginx' && \
-	git clone 'https://github.com/godlygeek/tabular' && \
-	git clone 'https://github.com/hashivim/vim-hashicorp-tools' && \
-	git clone 'https://github.com/junegunn/fzf.vim' && \
-	git clone 'https://github.com/mileszs/ack.vim' && \
-	git clone 'https://github.com/roxma/vim-tmux-clipboard' && \
-	git clone 'https://github.com/plasticboy/vim-markdown' && \
-	git clone 'https://github.com/scrooloose/nerdtree' && \
-	git clone 'https://github.com/t9md/vim-choosewin' && \
-	git clone 'https://github.com/tmux-plugins/vim-tmux' && \
-	git clone 'https://github.com/tmux-plugins/vim-tmux-focus-events' && \
-	git clone 'https://github.com/fatih/molokai' && \
-	git clone 'https://github.com/tpope/vim-commentary' && \
-	git clone 'https://github.com/tpope/vim-eunuch' && \
-	git clone 'https://github.com/tpope/vim-fugitive' && \
-	git clone 'https://github.com/tpope/vim-repeat' && \
-	git clone 'https://github.com/tpope/vim-scriptease' && \
-	git clone 'https://github.com/ervandew/supertab'
-
 # base OS
-FROM ubuntu:18.10
+#FROM $BASE_CONTAINER 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
@@ -139,9 +115,9 @@ RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
 
 USER root
 ENV DEBIAN_FRONTEND noninteractive
-ARG NB_USER="vincent"
-ARG NB_UID="1000"
-ARG NB_GID="100"
+ARG NB_USER="root"
+#ARG NB_UID="1000"
+#ARG NB_GID="100"
 
 RUN apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
@@ -170,37 +146,67 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash \
     NB_USER=$NB_USER \
-    NB_UID=$NB_UID \
-    NB_GID=$NB_GID \
+ #   NB_UID=$NB_UID \
+ #   NB_GID=$NB_GID \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
 ENV PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER
+    HOME=/$NB_USER
 
 ADD fix-permissions /usr/local/bin/fix-permissions
 
 # and make sure these dirs are writable by the `users` group.
 RUN groupadd wheel -g 11 && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
-    useradd -m -N -u 1000 $NB_USER && \
     mkdir -p $CONDA_DIR && \
     chown $NB_USER:$NB_GID $CONDA_DIR && \
     chmod g+w /etc/passwd && \
     fix-permissions $HOME && \
     fix-permissions "$(dirname $CONDA_DIR)"
 
-USER $NB_UID
+USER $NB_USER 
 
 # Setup work directory for backward-compatibility
-RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
+RUN mkdir $HOME/work  
+RUN fix-permissions $HOME/work  
 
+# install vim plugins
+# FROM $BASE_CONTAINER as vim_plugins_builder
 USER root
+RUN apt-get update && apt-get install -y git ca-certificates
+
+USER $NB_USER 
+RUN mkdir -p $HOME/.vim/plugged && cd $HOME/.vim/plugged && \ 
+	git clone 'https://github.com/AndrewRadev/splitjoin.vim' && \ 
+	git clone 'https://github.com/fatih/vim-hclfmt' && \
+	git clone 'https://github.com/fatih/vim-nginx' && \
+	git clone 'https://github.com/godlygeek/tabular' && \
+	git clone 'https://github.com/hashivim/vim-hashicorp-tools' && \
+	git clone 'https://github.com/junegunn/fzf.vim' && \
+	git clone 'https://github.com/mileszs/ack.vim' && \
+	git clone 'https://github.com/roxma/vim-tmux-clipboard' && \
+	git clone 'https://github.com/plasticboy/vim-markdown' && \
+	git clone 'https://github.com/scrooloose/nerdtree' && \
+	git clone 'https://github.com/t9md/vim-choosewin' && \
+	git clone 'https://github.com/tmux-plugins/vim-tmux' && \
+	git clone 'https://github.com/tmux-plugins/vim-tmux-focus-events' && \
+	git clone 'https://github.com/fatih/molokai' && \
+	git clone 'https://github.com/tpope/vim-commentary' && \
+	git clone 'https://github.com/tpope/vim-eunuch' && \
+	git clone 'https://github.com/tpope/vim-fugitive' && \
+	git clone 'https://github.com/tpope/vim-repeat' && \
+	git clone 'https://github.com/tpope/vim-scriptease' && \
+	git clone 'https://github.com/ervandew/supertab'
+
+
+#
+USER root
+
 #Install conda as vincent and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION 4.5.11
 RUN cd /tmp && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
+    wget  --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     echo "e1045ee415162f944b6aebfe560b8fee *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
@@ -210,10 +216,11 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda install --quiet --yes conda="${MINICONDA_VERSION%.*}.*" && \
     $CONDA_DIR/bin/conda update --all --quiet --yes && \
     conda clean -tipsy && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf $HOME/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions $HOME 
 
+USER root
 # R packages
 RUN conda install --quiet --yes \
     'r-base=3.5.1' \
@@ -246,7 +253,7 @@ RUN conda install --quiet --yes 'tini=0.18.0' && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions $HOME 
 
 # Install Jupyter Notebook, Lab, and Hub
 # Generate a notebook server config
@@ -263,16 +270,16 @@ RUN conda install --quiet --yes \
     npm cache clean --force && \
     jupyter notebook --generate-config && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf $HOME/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions $HOME 
 
 # ffmpeg for matplotlib anim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
+USER $NB_USER 
 
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
@@ -314,10 +321,10 @@ RUN conda install --quiet --yes \
     jupyter labextension install jupyterlab_bokeh@0.6.3 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    rm -rf /home/$NB_USER/.node-gyp && \
+    rm -rf $HOME/.cache/yarn && \
+    rm -rf $HOME/.node-gyp && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions $HOME 
 
 USER root
 # Install facets which does not have a pip or conda package at the moment
@@ -328,12 +335,12 @@ RUN cd /tmp && \
     cd && \
     rm -rf /tmp/facets && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    fix-permissions $HOME 
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
+ENV XDG_CACHE_HOME $HOME/.cache/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions /home/$NB_USER 
+    fix-permissions $HOME 
 
 # R pre-requisites
 RUN apt-get update && \
@@ -377,7 +384,9 @@ RUN conda install --quiet --yes \
 
 USER root 
 RUN mkdir /run/sshd
+RUN mkdir /run/sshd2
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+COPY sshd_config /etc/ssh/sshd_config  
 RUN sed 's/#Port 22/Port 3222/' -i /etc/ssh/sshd_config
 
 RUN add-apt-repository ppa:jonathonf/vim -y && apt-get update && apt-get install vim-gtk3 -y
@@ -404,25 +413,26 @@ RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql
 ENV TERM screen-256color
 
 # kubectl
-COPY --from=kubectl_builder /usr/local/bin/kubectl /usr/local/bin/
+# COPY /usr/local/bin/kubectl /usr/local/bin/
 
 # kubectl
-COPY --from=onepassword_builder /usr/bin/op /usr/local/bin/
+# COPY /usr/bin/op /usr/local/bin/
 
 # doctl tools
-COPY --from=doctl_builder /usr/local/bin/doctl /usr/local/bin/
+# COPY /usr/local/bin/doctl /usr/local/bin/
 
 # terraform tools
-COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
+# COPY /usr/local/bin/terraform /usr/local/bin/
 
 # install tools
 RUN wget https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && sudo dpkg -i jump_0.22.0_amd64.deb && rm -rf jump_0.22.0_amd64.deb
 
-RUN mkdir ~/.ssh && curl -fsL https://github.com/vdenoise.keys > ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+USER $NB_USER 
+RUN mkdir $HOME/.ssh && curl -fsL https://github.com/vdenoise.keys > ~/.ssh/authorized_keys && chmod 700 $HOME/.ssh && chmod 600 $HOME/.ssh/authorized_keys
 
 # vim plugins
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-COPY --from=vim_plugins_builder /root/.vim/plugged /root/.vim/plugged
+#COPY --from=vim_plugins_builder $HOME/.vim/plugged /root/.vim/plugged
 
 #RUN git clone https://github.com/junegunn/fzf /root/.fzf && cd /root/.fzf && git remote set-url origin git@github.com:junegunn/fzf.git && /root/.fzf/install --bin --64 --no-bash --no-zsh --no-fish
 
@@ -436,11 +446,12 @@ RUN git clone https://github.com/tmux-plugins/tmux-open.git ~/.tmux/plugins/tmux
 RUN git clone https://github.com/tmux-plugins/tmux-yank.git ~/.tmux/plugins/tmux-yank
 RUN git clone https://github.com/tmux-plugins/tmux-prefix-highlight.git ~/.tmux/plugins/tmux-prefix-highlight
 
+USER root 
 RUN chsh -s /usr/bin/zsh
 
 EXPOSE 3222 60000-60010/udp
 
-WORKDIR /root
+WORKDIR $HOME 
 COPY entrypoint.sh /bin/entrypoint.sh
 CMD ["/bin/entrypoint.sh"]
 

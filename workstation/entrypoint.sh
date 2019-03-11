@@ -7,7 +7,7 @@ if [ ! -d ~/dotfiles ]; then
   # the reason we dont't copy the files individually is, to easily push changes
   # if needed
   cd ~/
-  git clone --recursive ssh://git@github.com/vdenoise/dotfiles.git
+  git clone --recursive https://github.com/vdenoise/dotfiles.git
 fi
 
 cd ~/dotfiles 

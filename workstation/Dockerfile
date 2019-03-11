@@ -434,7 +434,7 @@ RUN mkdir $HOME/.ssh && curl -fsL https://github.com/vdenoise.keys > ~/.ssh/auth
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 #COPY --from=vim_plugins_builder $HOME/.vim/plugged /root/.vim/plugged
 
-#RUN git clone https://github.com/junegunn/fzf /root/.fzf && cd /root/.fzf && git remote set-url origin git@github.com:junegunn/fzf.git && /root/.fzf/install --bin --64 --no-bash --no-zsh --no-fish
+RUN git clone https://github.com/junegunn/fzf /root/.fzf && cd /root/.fzf && git remote set-url origin git@github.com:junegunn/fzf.git && /root/.fzf/install --bin --64 --no-bash --no-zsh --no-fish
 
 # zsh plugins
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
@@ -452,6 +452,7 @@ RUN chsh -s /usr/bin/zsh
 EXPOSE 3222 60000-60010/udp
 
 WORKDIR $HOME 
+COPY entrypoint.sh /bin/entrypoint.sh
 COPY entrypoint.sh /bin/entrypoint.sh
 CMD ["/bin/entrypoint.sh"]
 

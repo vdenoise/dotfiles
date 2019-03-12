@@ -20,7 +20,6 @@
 	unstage = reset HEAD --
 	prev = checkout -
 	discard = checkout -- 
-
 [color]
 	ui = auto
 [color "branch"]

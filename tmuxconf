@@ -1,4 +1,4 @@
-NSTALL
+#INSTALL
 # cp tmuxconf ~/.tmux.conf
 #
 # Set prefix key to c-f instead of default c-b

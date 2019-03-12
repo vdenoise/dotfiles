@@ -4,8 +4,6 @@ set -e
 
 if [ ! -d ~/dotfiles ]; then
   echo "Vincent test: Cloning dotfiles"
-  # the reason we dont't copy the files individually is, to easily push changes
-  # if needed
   cd ~/
   git clone --recursive https://github.com/vdenoise/dotfiles.git
 fi
@@ -23,5 +21,4 @@ ln -s $(pwd)/gitconfig ~/.gitconfig
 ln -s $(pwd)/agignore ~/.agignore
 ln -s $(pwd)/sshconfig ~/.ssh/config
 
-
-/usr/sbin/sshd -D
+/usr/sbin/sshd -D  

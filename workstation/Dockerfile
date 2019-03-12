@@ -384,10 +384,9 @@ RUN conda install --quiet --yes \
 
 USER root 
 RUN mkdir /run/sshd
-RUN mkdir /run/sshd2
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-COPY sshd_config /etc/ssh/sshd_config  
-RUN sed 's/#Port 22/Port 3222/' -i /etc/ssh/sshd_config
+COPY sshd_config /etc/ssh/sshd_config 
+RUN sed 's/Port 22/Port 3222/' -i /etc/ssh/sshd_config
 
 RUN add-apt-repository ppa:jonathonf/vim -y && apt-get update && apt-get install vim-gtk3 -y
 
@@ -452,7 +451,6 @@ RUN chsh -s /usr/bin/zsh
 EXPOSE 3222 60000-60010/udp
 
 WORKDIR $HOME 
-COPY entrypoint.sh /bin/entrypoint.sh
 COPY entrypoint.sh /bin/entrypoint.sh
 CMD ["/bin/entrypoint.sh"]
 

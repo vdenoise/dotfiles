@@ -67,9 +67,8 @@ resource "digitalocean_droplet" "dev" {
       timeout     = "2m"
     }
   }
-  
+}
  
- }
 
 resource "digitalocean_firewall" "dev" {
   name = "dev"

@@ -51,6 +51,8 @@ RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
 	dnsutils \
 	docker.io \
 	fakeroot-ng \
+  gcc \
+  g++ \
 	gdb \
 	git \
 	git-crypt \

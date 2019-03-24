@@ -492,13 +492,13 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
 
 " ==================== delimitMate ====================
-let g:delimitMate_expand_cr = 1   
+let g:delimitMate_expand_cr = 0   
 let g:delimitMate_expand_space = 1    
 let g:delimitMate_smart_quotes = 1    
 let g:delimitMate_expand_inside_quotes = 0    
 let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'   
 
-imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
+" imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
 " ==================== NerdTree ====================
 " For toggling

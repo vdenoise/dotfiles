@@ -1,116 +1,105 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# Path to your oh-my-bash installation.
+export OSH=/home/vincent/.oh-my-bash
 
-# If not running interactively, don't do anything
-#[ -z "$PS1" ] && return
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-bash is loaded.
+OSH_THEME="powerline"
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-HISTCONTROL=ignoredups:ignorespace
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
 
-# append to the history file, don't overwrite it
-shopt -s histappend
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_OSH_DAYS=13
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-function realpath()
-{
-    f=$@
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
 
-    if [ -d "$f" ]; then
-        base=""
-        dir="$f"
-    else
-        base="/$(basename "$f")"
-        dir=$(dirname "$f")
-    fi
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
 
-    dir=$(cd "$dir" && /bin/pwd)
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-    echo "$dir$base"
-}
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
 
-# Set prompt path to max 2 levels for best compromise of readability and usefulness
-promptpath () {
-    realpwd=$(realpath $PWD)
-    realhome=$(realpath $HOME)
+# Would you like to use another custom folder than $OSH/custom?
+# OSH_CUSTOM=/path/to/new-custom-folder
 
-    # if we are in the home directory
-    if echo $realpwd | grep -q "^$realhome"; then
-        path=$(echo $realpwd | sed "s|^$realhome|\~|")
-        if [ "$path" = "~" ] || [ "$(dirname "$path")" = "~" ]; then
-            echo $path
-        else
-            echo $(basename $(dirname "$path"))/$(basename "$path")
-        fi
-        return
-    fi
+# Which completions would you like to load? (completions can be found in ~/.oh-my-bash/completions/*)
+# Custom completions may be added to ~/.oh-my-bash/custom/completions/
+# Example format: completions=(ssh git bundler gem pip pip3)
+# Add wisely, as too many completions slow down shell startup.
+completions=(
+  git
+  composer
+  ssh
+  docker-machine
+  docker-compose
+  conda
+  tmux
+)
 
-    path_dir=$(dirname "$PWD")
-    # if our parent dir is a top-level directory, don't mangle it
-    if [ $(dirname "$path_dir") = "/" ]; then
-        echo $PWD
-    else
-        path_parent=$(basename "$path_dir")
-        path_base=$(basename "$PWD")
+# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
+# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
+# Example format: aliases=(vagrant composer git-avh)
+# Add wisely, as too many aliases slow down shell startup.
+aliases=(
+  general
+)
 
-        echo $path_parent/$path_base
-    fi
-}
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  bashmarks
+)
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
-    ;;
-*)
-    ;;
-esac
+source $OSH/oh-my-bash.sh
 
-if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
-    alias ls='ls --color=auto'
-    alias ll='ls --color=auto -alF'
-    alias la='ls --color=auto -A'
-    alias l='ls --color=auto -CF'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+# User configuration
+# export MANPATH="/usr/local/man:$MANPATH"
 
-    # Set a terminal prompt style (default is fancy color prompt)
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h \[\033[01;34m\]$(promptpath)\[\033[00m\]\$ '
-else
-    alias ls="ls -F"
-    alias ll='ls -alF'
-    alias la='ls -A'
-    alias l='ls -CF'
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h $(promptpath)\$ '
-fi
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
-run_scripts()
-{
-    for script in $1/*; do
-        [ -x "$script" ] || continue
-        . $script
-    done
-}
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-run_scripts $HOME/.bashrc.d
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
+# Set personal aliases, overriding those provided by oh-my-bash libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-bash
+# users are encouraged to define aliases within the OSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias bashconfig="mate ~/.bashrc"
+# alias ohmybash="mate ~/.oh-my-bash"

@@ -1,193 +1,105 @@
-nstall
-# 1. Install latest bash via brew: brew install bash
-# 2. To source .bashrc, create .bash_profile with content:
+# Path to your oh-my-bash installation.
+export OSH=/home/vincent/.oh-my-bash
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-bash is loaded.
+OSH_THEME="powerline"
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_OSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $OSH/custom?
+# OSH_CUSTOM=/path/to/new-custom-folder
+
+# Which completions would you like to load? (completions can be found in ~/.oh-my-bash/completions/*)
+# Custom completions may be added to ~/.oh-my-bash/custom/completions/
+# Example format: completions=(ssh git bundler gem pip pip3)
+# Add wisely, as too many completions slow down shell startup.
+completions=(
+  git
+  composer
+  ssh
+  docker-machine
+  docker-compose
+  conda
+  tmux
+)
+
+# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
+# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
+# Example format: aliases=(vagrant composer git-avh)
+# Add wisely, as too many aliases slow down shell startup.
+aliases=(
+  general
+)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  bashmarks
+)
+
+source $OSH/oh-my-bash.sh
+
+# User configuration
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-bash libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-bash
+# users are encouraged to define aliases within the OSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
 #
-#    if [ -f ~/.bashrc ]; then . ~/.bashrc; fi 
-#
-###############
-
-# Source other files
-
-# Senstive functions which are not pushed to Github
-# It contains GOPATH, some functions, aliases etc...
-[ -r ~/.bash_private ] && source ~/.bash_private
-
-# On Mac OS X: brew install bash-completion
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
-fi
-
-
-# Get it from the original Git repo: 
-# https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
-if [ -f ~/.git-prompt.sh ]; then
-  source ~/.git-prompt.sh
-fi
-
-# # Get it from the original Git repo: 
-# https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
-if [ -f ~/.git-completion.bash ]; then
-  source ~/.git-completion.bash
-fi
-
-###############
-# Aliases (custom)
-alias ..='cd ..'
-alias ls='ls -GpF' # Mac OSX specific
-alias ll='ls -alGpF' # Mac OSX specific
-
-# most used fast git commands
-alias t="tig status"
-alias tigs="tig status" #old habits don't die
-alias d='git diff' 
-
-alias vi='nvim'
-alias vim='nvim'
-# alias vi='vim'
- 
-#################
-# Git
-#################
-
-alias sq='git rebase -i $(git merge-base $(git rev-parse --abbrev-ref HEAD) master)'
-alias co='git checkout master'
-alias po='git pull origin master'
-alias b='git branch'
-alias hc='hub compare'
-
-###############
-# Exports (custom)
-
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN"
-
-export EDITOR="vim"
-
-# checkout `man ls` for the meaning
-export LSCOLORS=cxBxhxDxfxhxhxhxhxcxcx
-
-export CLICOLOR=1
-
-# enable GIT prompt options
-export GIT_PS1_SHOWCOLORHINTS=true
-export GIT_PS1_SHOWDIRTYSTATE=true
-export GIT_PS1_SHOWUNTRACKEDFILES=true
-
-###############
-# Bash settings
-
-# -- Prompt
-
-# If we don't use the below git master one, use this simple
-# PS1="\[$(tput setaf 6)\]\W\[$(tput sgr0)\]\[$(tput sgr0)\] \$ "
-
-# 1. Git branch is being showed
-# 2. Title of terminal is changed for each new shell
-# 3. History is appended each time
-export PROMPT_COMMAND='__git_ps1 "\[$(tput setaf 6)\]\W\[$(tput sgr0)\]\[$(tput sgr0)\]" " "; echo -ne "\033]0;${PWD##*/}\007"'
-
-
-# -- History
-
-# ignoreboth ignores commands starting with a space and duplicates. Erasedups
-# removes all previous dups in history
-export HISTCONTROL=ignoreboth:erasedups  
-export HISTFILE=~/.bash_history          # be explicit about file path
-export HISTSIZE=100000                   # in memory history size
-export HISTFILESIZE=100000               # on disk history size
-export HISTTIMEFORMAT='%F %T '
-shopt -s histappend # append to history, don't overwrite it
-shopt -s cmdhist    # save multi line commands as one command
-
-# Save multi-line commands to the history with embedded newlines
-# instead of semicolons -- requries cmdhist to be on.
-shopt -s lithist
-
-# -- Completion
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-bind "set completion-ignore-case on" # note: bind used instead of sticking these in .inputrc
-bind "set bell-style none" # no bell
-bind "set show-all-if-ambiguous On" # show list automatically, without double tab
-# bind "TAB: menu-complete" # TAB syle completion
-
-# Ignore files with these suffixes when performing completion.
-export FIGNORE='.o:.pyc'
-
-# Ignore files that match these patterns when 
-# performing filename expansion.
-export GLOBIGNORE='.DS_Store:*.o:*.pyc'
-
-# -- Functions
-
-# extracts the given file
-x () {
-    if [ -f $1 ] ; then
-      case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
-        *.tar.gz)    tar xzf $1     ;;
-        *.bz2)       bunzip2 $1     ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
-        *)     echo "'$1' cannot be extracted via extract()" ;;
-         esac
-     else
-         echo "'$1' is not a valid file"
-     fi
-}
-
-# -- Misc
-
-# Colored man pages
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
-
-# check windows size if windows is resized
-shopt -s checkwinsize
-
-# autocorrect directory if mispelled
-shopt -s dirspell direxpand
-
-# auto cd if only the directory name is given
-shopt -s autocd
-
-#use extra globing features. See man bash, search extglob.
-shopt -s extglob
-
-#include .files when globbing.
-shopt -s dotglob
-
-# Do not exit an interactive shell upon reading EOF.
-set -o ignoreeof;
-
-# Check the hash table for a command name before searching $PATH.
-shopt -s checkhash
-
-# Enable `**` pattern in filename expansion to match all files,
-# directories and subdirectories.
-shopt -s globstar
-
-# Do not attempt completions on an empty line.
-shopt -s no_empty_cmd_completion
-
-# Case-insensitive filename matching in filename expansion.
-shopt -s nocaseglob
-
-
-# brew install jump
-# https://github.com/gsamokovarov/jump
-eval "$(jump shell)"
-
-# brew install direnv
-# https://github.com/direnv/direnv
-eval "$(direnv hook bash)"
+# Example aliases
+# alias bashconfig="mate ~/.bashrc"
+# alias ohmybash="mate ~/.oh-my-bash"

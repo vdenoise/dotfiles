@@ -1,8 +1,17 @@
 " I use the same vimrc for both nvim and vim
 call plug#begin('~/.vim/plugged')
+
+"enable switching between single line code to multi line block
 Plug 'AndrewRadev/splitjoin.vim'
+
+"removes the need for set paste
 Plug 'ConradIrwin/vim-bracketed-paste'
+
 "Plug 'Raimondi/delimitMate'
+
+" Async linting
+Plug 'w0rp/ale'
+
 "Plug 'SirVer/ultisnips'
 Plug 'cespare/vim-toml'
 Plug 'corylanou/vim-present', {'for' : 'present'}

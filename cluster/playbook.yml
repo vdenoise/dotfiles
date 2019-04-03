@@ -1,0 +1,156 @@
+---
+- hosts: all
+  remote_user: vincent
+  become: yes
+  become_method: sudo
+
+  vars_prompt:
+    - name: "githubuser"
+      prompt: "Enter your GitHub user name"
+      private: no
+    - name: "githubpassword"
+      prompt: "Enter your GitHub password"
+      private: yes
+
+  tasks:
+    - name: update package repository
+      become: yes
+      apt:
+        name: mosh
+        update-cache: true
+
+    - name: install basic packages
+      become: yes
+      apt: 
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - 'mosh'
+        - 'python'
+        - 'python3'
+        - 'htop'
+        - 'git'
+        - 'ruby-full'   
+
+    - include: tasks/installVim.yml
+    - include: tasks/installTmux.yml
+    - include: tasks/installZsh.yml
+    - include: tasks/installBash.yml
+
+    - name: cloning dotfiles
+      become: no
+      git:
+        repo: https://{{ githubuser }}:{{ githubpassword }}@github.com/vdenoise/dotfiles.git
+        dest: /home/vincent/dotfiles
+        force: yes
+
+    - name: symlink files
+      become: no
+      file:
+        src: '/home/vincent/dotfiles/{{item.src}}'
+        dest: '/home/vincent/{{item.dest}}'
+        state: link
+        force: yes
+      with_items:
+        - {src: 'vimrc', dest: '.vimrc'}
+        - {src: 'tmuxconf', dest: '.tmux.conf'}
+        - {src: 'tmuxconflocal', dest: '.tmux.conf.local'}
+        - {src: 'bashrc', dest: '.bashrc'}
+        - {src: 'zshrc', dest: '.zshrc'}
+
+- hosts: dev
+  remote_user: vincent
+  become_method: sudo
+  tasks:
+    - name: Get aptitude for upgrade
+      apt: pkg=aptitude state=present
+
+    - name: "Install dev packages"
+      tags: dev
+      apt: name{{ item }} state=present
+      with_items:
+        - gcc
+        - g++
+        - sysstat
+        - htop
+        - git
+        - subversion
+        - mercurial
+        - python-samba
+        - vim
+        - virtualbox
+        - vagrant
+        - indicator-multiload
+        - chromium-browser
+        - sublime-text
+        - rdesktop
+        - openvpn
+        - python-dev
+        - r-base
+        - r-recommended
+        - tilemill
+        - classicmenu-indicator
+        - gimp
+        - inkscape
+        - ruby-dev
+        - sqlite
+        - pgadmin3
+        - postgresql
+        - libpq-dev
+        - python-psycopg2
+        - imagemagick
+        - marble
+        - mapserver-bin
+        - python-mapscript
+        - python-matplotlib
+        - liblas-bin
+        - gdal-bin
+        - python-gdal
+        - grass
+        - libspatialite-dev
+        - spatialite-gui
+        - spatialite-bin
+        - libzmq-dev
+        - qgis
+        - pandoc
+        - texlive-latex-base
+        - texlive-latex-recommended
+        - texlive-latex-extra
+        - texlive-fonts-recommended
+        - unity-tweak-tool
+        - xclip
+        - sqliteman
+        - filezilla
+        - gummi
+        - texmaker
+        - keepassx
+        - wireshark
+        - cifs-utils
+        - build-dep
+        - python-scipy
+
+#    - name: Install global python requirements
+#      pip: name={{item}} state=present
+#      with_items:
+#        - pandas
+#        - scipy
+#        - shapely
+#        - django
+#        - pyshp
+#        - geopy
+#        - pyproj
+#        - ipython
+#        - ipdb
+#        - scikit-learn
+#        - pyzmq
+#        - tornado
+#        - pygments
+#        - sphinx
+#        - patsy
+#        - statsmodels
+#        - ggplot
+#        - rpy2
+#        - fabric
+
+...

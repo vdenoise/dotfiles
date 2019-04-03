@@ -1,0 +1,32 @@
+---
+- name: install vim and dependencies
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  vars:
+    item:
+      - vim-gui-common
+      - vim
+      - vim-runtime
+
+- name: prepare vim directory - autoload
+  become: no
+  file:
+    path: "/home/vincent/.vim/autoload"
+    state: directory
+    mode: 0755
+
+- name: prepare vim directory - plugged
+  become: no
+  file:
+    path: "/home/vincent/.vim/plugged"
+    state: directory
+    mode: 0755
+
+- name: download vim-plug
+  become: no
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: /home/vincent/.vim/autoload/plug.vim
+...

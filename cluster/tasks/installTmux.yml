@@ -1,0 +1,35 @@
+---
+- name: install tmux
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  vars:
+    item: tmux
+
+- name: tmux/tpm resetting up files and directories
+  become: false
+  file:
+    path: /home/vincent/.tmux/plugins
+    state: absent
+
+- name: tmux/tpm setting up files and directories
+  become: false
+  file:
+    path: /home/vincent/.tmux/plugins/tpm
+    state: directory
+
+- name: Cloning tmux plugin manager
+  become: false
+  git:
+    repo: https://{{ githubuser }}:{{ githubpassword }}@github.com//tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+    force: true
+  register: cloning
+
+- name: Cloning tmuxinator
+  become: false
+  gem:
+    name: tmuxinator
+    state: latest
+...

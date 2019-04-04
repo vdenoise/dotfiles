@@ -5,12 +5,9 @@
     name: "{{item}}"
     state: latest
   with_items:
-    - docker
     - snapd
 
 - name: Install terraform with snap
   become: true
-  snap:
-    name: terraform
-    state: latest
+  command: sudo snap install terraform && sudo snap install docker
 ...

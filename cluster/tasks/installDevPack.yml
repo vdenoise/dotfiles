@@ -22,7 +22,6 @@
     - mercurial
     - python-samba
     - vim
-    - virtualbox
     - vagrant
     - indicator-multiload
     - chromium-browser

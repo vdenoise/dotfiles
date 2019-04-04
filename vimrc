@@ -1,6 +1,5 @@
 " I use the same vimrc for both nvim and vim
 call plug#begin('~/.vim/plugged')
-
 "enable switching between single line code to multi line block
 Plug 'AndrewRadev/splitjoin.vim'
 
@@ -15,20 +14,27 @@ Plug 'w0rp/ale'
 "New Plugin for LaTex
 Plug 'lervag/vimtex'
 
+" expand snippets
 "Plug 'SirVer/ultisnips'
+
 Plug 'cespare/vim-toml'
+
 Plug 'corylanou/vim-present', {'for' : 'present'}
 Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
 Plug 'elzr/vim-json', {'for' : 'json'}
 Plug 'fatih/vim-go'
 Plug 'fatih/vim-hclfmt'
 Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
+
+" Help in aligning tables and columns
 Plug 'godlygeek/tabular'
 Plug 'hashivim/vim-hashicorp-tools'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'plasticboy/vim-markdown'
+
+" File browser
 Plug 'scrooloose/nerdtree'
 Plug 't9md/vim-choosewin'
 Plug 'roxma/vim-tmux-clipboard'
@@ -36,11 +42,22 @@ Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'fatih/molokai'
 Plug 'tpope/vim-commentary'
+
+"Access to command lines macros from vim
 Plug 'tpope/vim-eunuch'
+
+" GIT client
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-scriptease'
+
+" Completion menu via tab
 Plug 'ervandew/supertab'
+
+" colour R output
+Plug 'jalvesaq/colorout'
+
+"Full R IDE
 Plug 'jalvesaq/Nvim-R'
 call plug#end()
 

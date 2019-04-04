@@ -7,4 +7,10 @@
   with_items:
     - docker
     - snapd
+
+- name: Install terraform with snap
+  become: true
+  snap:
+    name: terraform
+    state: latest
 ...

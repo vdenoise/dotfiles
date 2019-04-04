@@ -23,9 +23,6 @@
     - python-samba
     - vim
     - vagrant
-    - indicator-multiload
-    - chromium-browser
-    - sublime-text
     - rdesktop
     - openvpn
     - python-dev

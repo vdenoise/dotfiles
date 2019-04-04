@@ -17,9 +17,6 @@ Plug 'lervag/vimtex'
 " expand snippets
 "Plug 'SirVer/ultisnips'
 
-Plug 'cespare/vim-toml'
-
-Plug 'corylanou/vim-present', {'for' : 'present'}
 Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
 Plug 'elzr/vim-json', {'for' : 'json'}
 Plug 'fatih/vim-go'
@@ -32,6 +29,8 @@ Plug 'hashivim/vim-hashicorp-tools'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
+
+" Formatting markdown
 Plug 'plasticboy/vim-markdown'
 
 " File browser
@@ -49,7 +48,6 @@ Plug 'tpope/vim-eunuch'
 " GIT client
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-scriptease'
 
 " Completion menu via tab
 Plug 'ervandew/supertab'
@@ -59,6 +57,9 @@ Plug 'jalvesaq/colorout'
 
 "Full R IDE
 Plug 'jalvesaq/Nvim-R'
+
+" Python Dev
+Plug 'python-mode/python-mode', { 'branch': 'develop'  }
 call plug#end()
 
 "=====================================================

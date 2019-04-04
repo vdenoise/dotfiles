@@ -75,6 +75,7 @@ plugins=(
 )
 
 source $OSH/oh-my-bash.sh
+PATH=$PATH:/snap/bin
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -103,3 +104,4 @@ source $OSH/oh-my-bash.sh
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
+

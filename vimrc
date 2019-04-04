@@ -7,7 +7,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 "removes the need for set paste
 Plug 'ConradIrwin/vim-bracketed-paste'
 
-"Plug 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'
 
 " Async linting
 Plug 'w0rp/ale'

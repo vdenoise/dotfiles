@@ -1,27 +1,27 @@
 ---
 - hosts: all
   remote_user: vincent
-  become: yes
+  become: true
   become_method: sudo
 
   vars_prompt:
     - name: "githubuser"
       prompt: "Enter your GitHub user name"
-      private: no
+      private: false
     - name: "githubpassword"
       prompt: "Enter your GitHub password"
-      private: yes
+      private: true
 
   tasks:
     - name: update package repository
-      become: yes
+      become: true
       apt:
         name: mosh
         update-cache: true
 
     - name: install basic packages
-      become: yes
-      apt: 
+      become: true
+      apt:
         name: "{{ item }}"
         state: present
         update_cache: true
@@ -31,7 +31,7 @@
         - 'python3'
         - 'htop'
         - 'git'
-        - 'ruby-full'   
+        - 'ruby-full'
 
     - include: tasks/installVim.yml
     - include: tasks/installTmux.yml
@@ -39,19 +39,19 @@
     - include: tasks/installBash.yml
 
     - name: cloning dotfiles
-      become: no
+      become: false
       git:
         repo: https://{{ githubuser }}:{{ githubpassword }}@github.com/vdenoise/dotfiles.git
         dest: /home/vincent/dotfiles
-        force: yes
+        force: true
 
     - name: symlink files
-      become: no
+      become: false
       file:
         src: '/home/vincent/dotfiles/{{item.src}}'
         dest: '/home/vincent/{{item.dest}}'
         state: link
-        force: yes
+        force: true
       with_items:
         - {src: 'vimrc', dest: '.vimrc'}
         - {src: 'tmuxconf', dest: '.tmux.conf'}
@@ -62,6 +62,7 @@
 - hosts: dev
   remote_user: vincent
   become_method: sudo
+  become: true
   tasks:
     - name: Get aptitude for upgrade
       apt: pkg=aptitude state=present

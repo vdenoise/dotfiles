@@ -25,6 +25,5 @@
     - patsy
     - statsmodels
     - ggplot
-    - rpy2
     - fabric
 ...

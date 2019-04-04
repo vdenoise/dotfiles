@@ -60,6 +60,4 @@
     - keepassx
     - wireshark
     - cifs-utils
-    - build-dep
-    - python-scipy
 ...

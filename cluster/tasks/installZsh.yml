@@ -1,6 +1,6 @@
 ---
 - name: install zsh
-  become: yes
+  become: true
   apt:
     name: "{{ item }}"
     state: present
@@ -8,45 +8,44 @@
     item: zsh
 
 - name: Installing Zsh and git
-  become: yes
+  become: true
   apt: pkg=zsh,git state=latest
   register: installation
 
 - name: Backing up existing ~/.zshrc
   shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc{,.orig}; fi
   when: installation is success
-  sudo: no
 
 - name: Cloning  oh-my-zsh
-  become: no
+  become: false
   git:
     repo: https://{{ githubuser }}:{{ githubpassword }}@github.com//robbyrussell/oh-my-zsh
     dest: ~/.oh-my-zsh
-    force: yes
+    force: true
   when: installation is success
   register: cloning
 
 - name: Cloning  oh-my-zsh / autosuggest
-  become: no
+  become: false
   git:
     repo: https://{{ githubuser }}:{{ githubpassword }}@github.com//zsh-users/zsh-autosuggestions 
     dest: ~/.oh-my-zsh/plugins/zsh-autosuggestions
-    force: yes
+    force: true
   when: installation is success
 
 - name: Cloning  oh-my-zsh / syntax highlighting
-  become: no
+  become: false
   git:
     repo: https://{{ githubuser }}:{{ githubpassword }}@github.com//zsh-users/zsh-syntax-highlighting 
     dest: ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
-    force: yes
+    force: true
   when: installation is success
 
 - name: Cloning  oh-my-zsh / Powerline 9K
-  become: no
+  become: false
   git:
     repo: https://{{ githubuser }}:{{ githubpassword }}@github.com//bhilburn/powerlevel9k
     dest: ~/.oh-my-zsh/custom/themes/powerlevel9k
-    force: yes
+    force: true
   when: installation is success
 ...

@@ -514,8 +514,7 @@ let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'
 
 " ==================== NerdTree ====================
 " For toggling
-noremap <Leader>n :NERDTreeToggle<cr>
-noremap <Leader>f :NERDTreeFind<cr>
+map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
 

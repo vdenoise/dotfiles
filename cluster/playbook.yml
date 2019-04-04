@@ -67,4 +67,4 @@
     - include: tasks/installDevPack.yml
     - include: tasks/installPythonPack.yml
     - include: tasks/installLatex.yml
-...
+    - include: tasks/installDevOps.yml

@@ -9,5 +9,9 @@
 
 - name: Install terraform with snap
   become: true
-  command: sudo snap install terraform && sudo snap install docker
+  command: sudo snap install terraform
+
+- name: install docker with snap
+  become: true
+  command: sudo snap install docker
 ...

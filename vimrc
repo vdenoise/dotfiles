@@ -12,6 +12,9 @@ Plug 'Raimondi/delimitMate'
 " Async linting
 Plug 'w0rp/ale'
 
+"New Plugin for LaTex
+Plug 'lervag/vimtex'
+
 "Plug 'SirVer/ultisnips'
 Plug 'cespare/vim-toml'
 Plug 'corylanou/vim-present', {'for' : 'present'}

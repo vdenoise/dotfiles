@@ -2,7 +2,6 @@
 - hosts: all
   remote_user: vincent
   become: true
-  become_method: sudo
 
   vars_prompt:
     - name: "githubuser"
@@ -61,76 +60,12 @@
 
 - hosts: dev
   remote_user: vincent
-  become_method: sudo
   become: true
   tasks:
     - name: Get aptitude for upgrade
       apt: pkg=aptitude state=present
 
-    - name: "Install dev packages"
-      tags: dev
-      apt: name{{ item }} state=present
-      with_items:
-        - gcc
-        - g++
-        - sysstat
-        - htop
-        - git
-        - subversion
-        - mercurial
-        - python-samba
-        - vim
-        - virtualbox
-        - vagrant
-        - indicator-multiload
-        - chromium-browser
-        - sublime-text
-        - rdesktop
-        - openvpn
-        - python-dev
-        - r-base
-        - r-recommended
-        - tilemill
-        - classicmenu-indicator
-        - gimp
-        - inkscape
-        - ruby-dev
-        - sqlite
-        - pgadmin3
-        - postgresql
-        - libpq-dev
-        - python-psycopg2
-        - imagemagick
-        - marble
-        - mapserver-bin
-        - python-mapscript
-        - python-matplotlib
-        - liblas-bin
-        - gdal-bin
-        - python-gdal
-        - grass
-        - libspatialite-dev
-        - spatialite-gui
-        - spatialite-bin
-        - libzmq-dev
-        - qgis
-        - pandoc
-        - texlive-latex-base
-        - texlive-latex-recommended
-        - texlive-latex-extra
-        - texlive-fonts-recommended
-        - unity-tweak-tool
-        - xclip
-        - sqliteman
-        - filezilla
-        - gummi
-        - texmaker
-        - keepassx
-        - wireshark
-        - cifs-utils
-        - build-dep
-        - python-scipy
-
+    - include: tasks/installDevPack.yml
 #    - name: Install global python requirements
 #      pip: name={{item}} state=present
 #      with_items:

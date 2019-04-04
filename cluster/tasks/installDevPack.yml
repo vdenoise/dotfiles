@@ -47,7 +47,6 @@
     - libspatialite-dev
     - spatialite-gui
     - spatialite-bin
-    - libzmq-dev
     - qgis
     - pandoc
     - texlive-latex-base

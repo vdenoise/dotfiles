@@ -1,15 +1,11 @@
 # install latex and all dependencies
 ---
-- name: install zsh
-  become: true
-  apt:
-    name: "{{ item }}"
-    state: present
-  vars:
-    item: zsh
-
 - name: Installing texlive-full
   become: true
-  apt: pkg=texlive-full, texlive-generic-extra state=latest
-
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - texlive-full
+    - texlive-generic-extra
 ...

@@ -4,7 +4,9 @@
 
 - name: install dev packages
   tags: dev
-  apt: name{{ item }} state=present
+  apt:
+    name: "{{ item }}"
+    state: present
   with_items:
     - gcc
     - g++

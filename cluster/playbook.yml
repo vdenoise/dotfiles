@@ -66,27 +66,8 @@
       apt: pkg=aptitude state=present
 
     - include: tasks/installDevPack.yml
-#    - name: Install global python requirements
-#      pip: name={{item}} state=present
-#      with_items:
-#        - pandas
-#        - scipy
-#        - shapely
-#        - django
-#        - pyshp
-#        - geopy
-#        - pyproj
-#        - ipython
-#        - ipdb
-#        - scikit-learn
-#        - pyzmq
-#        - tornado
-#        - pygments
-#        - sphinx
-#        - patsy
-#        - statsmodels
-#        - ggplot
-#        - rpy2
-#        - fabric
+    - include: tasks/installPythonPack.yml
+    - include: tasks/installLatex.yml
+
 
 ...

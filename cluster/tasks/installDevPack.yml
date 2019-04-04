@@ -28,9 +28,6 @@
     - python-dev
     - r-base
     - r-recommended
-    - tilemill
-    - classicmenu-indicator
-    - gimp
     - inkscape
     - ruby-dev
     - sqlite

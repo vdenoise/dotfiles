@@ -1,12 +1,17 @@
 ---
 - name: install aptitude for upgrade
-  apt: pkg=aptitude state=present
+  become: true
+  apt:
+    name: aptitude
+    state: present
 
 - name: install dev packages
+  become: true
   tags: dev
   apt:
     name: "{{ item }}"
     state: present
+    update_cache: true
   with_items:
     - gcc
     - g++

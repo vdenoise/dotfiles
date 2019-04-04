@@ -41,6 +41,7 @@ Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'fatih/molokai'
 Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
 
 "Access to command lines macros from vim
 Plug 'tpope/vim-eunuch'

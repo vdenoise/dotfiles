@@ -17,11 +17,18 @@ Plug 'lervag/vimtex'
 " expand snippets
 "Plug 'SirVer/ultisnips'
 
+" Language oriented formatting and checking
 Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
 Plug 'elzr/vim-json', {'for' : 'json'}
 Plug 'fatih/vim-go'
 Plug 'fatih/vim-hclfmt'
 Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
+Plug 'plasticboy/vim-markdown'
+Plug 'cespare/vim-toml'
+"Full R IDE
+Plug 'jalvesaq/Nvim-R'
+
+"
 
 " Help in aligning tables and columns
 Plug 'godlygeek/tabular'
@@ -31,10 +38,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 
 " Formatting markdown
-Plug 'plasticboy/vim-markdown'
-
 " File browser
 Plug 'scrooloose/nerdtree'
+
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
 Plug 't9md/vim-choosewin'
 Plug 'roxma/vim-tmux-clipboard'
 Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
@@ -56,10 +64,6 @@ Plug 'ervandew/supertab'
 " colour R output
 Plug 'jalvesaq/colorout'
 
-"Full R IDE
-Plug 'jalvesaq/Nvim-R'
-
-" Python Dev
 Plug 'python-mode/python-mode', { 'branch': 'develop'  }
 call plug#end()
 

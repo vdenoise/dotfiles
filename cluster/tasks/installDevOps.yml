@@ -45,9 +45,10 @@
 - name: add docker official repository for Debian Stretch
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
-      state: present
+    state: present
+
 - name: Index new repo into the cache
-  become: yes
+  become: true
   apt:
     name: "*"
     state: latest
@@ -55,9 +56,10 @@
     force_apt_get: true
 
 - name: actually install docker
+  become: true
   apt:
     name: "docker-ce"
-   	state: latest
+    state: latest
 
 - name: launch docker
   become: true

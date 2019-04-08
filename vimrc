@@ -41,6 +41,9 @@ Plug 'mileszs/ack.vim'
 " File browser
 Plug 'scrooloose/nerdtree'
 
+" Buffer Brower
+Plug 'jeetsukumaran/vim-buffergator'
+
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 Plug 't9md/vim-choosewin'

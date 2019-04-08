@@ -16,9 +16,13 @@
   become: true
   command: snap install terraform
 
-- name: add gpg key
+- name: gpg key download
   become: true
-  command: curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  command: curl -fsSL https://download.docker.com/linux/debian/gpg
+
+- name: gpg key add
+  become: true
+  command: sudo apt-key add -
 
 - name: add docker repo
   become: true

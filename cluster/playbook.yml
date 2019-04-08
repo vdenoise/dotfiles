@@ -36,7 +36,7 @@
     - include: tasks/installTmux.yml
     - include: tasks/installZsh.yml
     - include: tasks/installBash.yml
-    
+
     - name: cloning dotfiles
       become: false
       git:
@@ -73,4 +73,4 @@
   remote_user: vincent
   become: true
   tasks:
-    -include: tasks/installDevOps.yml
+    - include: tasks/installDevOps.yml

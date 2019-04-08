@@ -73,4 +73,4 @@
   remote_user: vincent
   become: true
   tasks:
-    -include: tasks/lampstack.yml
+    -include: tasks/installDevOps.yml

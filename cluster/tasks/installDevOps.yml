@@ -14,4 +14,10 @@
 - name: install docker with snap
   become: true
   command: snap install docker
+
+- name: launch docker
+  become: true
+  systemd:
+    name: docker
+    state: started
 ...

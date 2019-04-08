@@ -74,3 +74,4 @@
   become: true
   tasks:
     - include: tasks/installDevOps.yml
+    - include: tasks/installWebStack.yml

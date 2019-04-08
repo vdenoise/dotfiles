@@ -6,14 +6,29 @@
     state: latest
   with_items:
     - snapd
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
 
 - name: Install terraform with snap
   become: true
   command: snap install terraform
 
-- name: install docker with snap
+- name: add gpg key
   become: true
-  command: snap install docker
+  command: curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+- name: add docker repo
+  become: true
+  command: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+- name: install docker
+  apt:
+    name: docker-ce
+    update-cache: true
+    state: latest
 
 - name: launch docker
   become: true

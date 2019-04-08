@@ -1,0 +1,44 @@
+# traefik, nginx, docker full stack
+# https://blog.ssdnode s.com/blog/traefik-multiple-ssl-websites/
+---
+
+# Step 2. Installing non-Dockerized backend applications
+
+- name: install apache2
+  become: true
+  apt:
+    name: apache2
+    state: latest
+    update-cache: true
+
+- name: change apache port to 8083
+  replace:
+    path: /etc/apache2/ports.conf
+    regexp: '80'
+    replace: '8083'
+
+- name: start apache
+  become: true
+  systemd:
+    name: apache2
+    state: started
+
+- name: install nginx
+  become: true
+  apt:
+    name: nginx
+    state: latest
+    update-cache: true
+
+# name: change nginx port to 80
+#  replace:
+#    path: /etc/apache2/ports.conf
+#    regexp: '80'
+#    replace: '8083'
+
+- name: start nginx
+  become: true
+  systemd:
+    name: nginx
+    state: started
+...

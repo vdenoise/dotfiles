@@ -12,34 +12,31 @@
     - gnupg2
     - software-properties-common
 
-- name: Install terraform with snap
-  become: true
-  command: snap install terraform
-
 - name: Update the apt package index
-  become: yes
+  become: true
   apt:
     name: "*"
     state: latest
-    update_cache: yes
-    force_apt_get: yes
+    update_cache: true
+    force_apt_get: true
 
 - name: Install packages for apt add repository over HTTPS
-  become: yes
+  become: true
   apt:
     name: "{{ packagesdep }}"
-    force_apt_get: yes
+    force_apt_get: true
     state: latest
-    update_cache: yes
+    update_cache: true
   vars:
     packagesdep:
-    - git
-    - apt-transport-https
-    - ca-certificates
-    - wget
-    - software-properties-common
-    - gnupg2
-    - curl
+      - git
+      - apt-transport-https
+      - ca-certificates
+      - wget
+      - software-properties-common
+      - gnupg2
+      - curl
+
 - name: Add Apt signing key from official docker repo
   apt_key:
     url: https://download.docker.com/linux/debian/gpg

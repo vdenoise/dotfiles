@@ -544,6 +544,9 @@ map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
 
+" ====================Tag Bar ================
+map <C-m> :TagbarToggle<CR>
+
 " ==================== ag ====================
 let g:ackprg = 'ag --vimgrep --smart-case'                                                   
 

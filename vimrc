@@ -11,9 +11,6 @@ Plug 'Raimondi/delimitMate'
 " Async linting
 Plug 'w0rp/ale'
 
-"New Plugin for LaTex
-Plug 'lervag/vimtex'
-
 " expand snippets
 "Plug 'SirVer/ultisnips'
 
@@ -23,12 +20,14 @@ Plug 'elzr/vim-json', {'for' : 'json'}
 Plug 'fatih/vim-go'
 Plug 'fatih/vim-hclfmt'
 Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
-Plug 'plasticboy/vim-markdown'
 Plug 'cespare/vim-toml'
+
 "Full R IDE
 Plug 'jalvesaq/Nvim-R'
 
-"
+" Just editing Text
+Plug 'plasticboy/vim-markdown'
+Plug 'lervag/vimtex'
 
 " Help in aligning tables and columns
 Plug 'godlygeek/tabular'
@@ -37,13 +36,12 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 
-" Formatting markdown
 " File browser
 Plug 'scrooloose/nerdtree'
+Plug 'majutsushi/tagbar'
 
 " Buffer Brower
 Plug 'jeetsukumaran/vim-buffergator'
-
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 Plug 't9md/vim-choosewin'
@@ -263,7 +261,7 @@ let mapleader = ","
 
 " Some useful quickfix shortcuts for quickfix
 map <C-n> :cn<CR>
-map <C-m> :cp<CR>
+"map <C-m> :cp<CR>
 nnoremap <leader>a :cclose<CR>
 
 " put quickfix window always to the bottom

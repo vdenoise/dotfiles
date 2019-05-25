@@ -22,6 +22,7 @@
     - mercurial
     - python-samba
     - vim
+    - neovim
     - vagrant
     - rdesktop
     - openvpn

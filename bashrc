@@ -105,3 +105,4 @@ PATH=$PATH:/snap/bin
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
 
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/snap/bin

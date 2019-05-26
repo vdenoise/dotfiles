@@ -15,6 +15,11 @@
   with_items:
     - gcc
     - g++
+    - gfortran
+    - libcurl-dev
+    - libssl-dev
+    - libblas-dev
+    - liblapack-dev
     - sysstat
     - htop
     - git
@@ -57,4 +62,4 @@
     - keepassx
     - wireshark
     - cifs-utils
-...
+..f
